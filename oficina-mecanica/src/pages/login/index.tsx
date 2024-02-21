@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useContext, useState } from "react";
-import  "../assets/login.css";
+import  "./style.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { AuthContext } from "../../contexts/auth/authContext";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +21,7 @@ export const Login = () =>{
 
     const handleLogin = async () => {
         if (email && password) {
-            
+            console.log('Aqui nessa porra');
             const isLogged = await auth.signin(email, password);
             if (isLogged) {
                 navigate('/home');
@@ -33,7 +33,7 @@ export const Login = () =>{
 
     return (
         <div className="wrapper">
-            <form action="" className="card text-bg-light mb-4">
+            <div className="card text-bg-light mb-4">
                 <div className="card-body">
                     <h2 className="card-title">Login</h2>
                     <div className="mb-2">
@@ -52,11 +52,11 @@ export const Login = () =>{
                         <a href="/register">Inscreva-se</a>
                     </div>
                     <div className="mb-2">
-                        <button type="submit" onClick={handleLogin} className="btn btn-success">ENTRAR</button>
+                        <button type="button" onClick={handleLogin} className="btn btn-success">ENTRAR</button>
                     </div>
                 </div>
                     
-            </form>
+            </div>
         </div>
     );
 }

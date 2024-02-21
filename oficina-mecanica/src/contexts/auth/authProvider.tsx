@@ -8,17 +8,18 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
     const api = useApi();
 
     useEffect(() => {
-        const validateToken = async () => {
-            const storageData = localStorage.getItem('authToken');
-            if (storageData) {
-                const data = await api.validateToken(storageData);
-                if (data.user) {
-                    setUser(data.user);
-                }
+        validateToken();
+    }, []);
+
+    const validateToken = async () => {
+        const storageData = localStorage.getItem('authToken');
+        if (storageData) {
+            const data = await api.validateToken(storageData);
+            if (data.user) {
+                setUser(data.user);
             }
         }
-        validateToken();
-    }, [api]);
+    }
 
     const signin = async (email: string, password: string) => {
         const data = await api.signin(email, password);
@@ -35,6 +36,7 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
         setUser(null);
         setToken('');
         await api.logout();
+        window.location.href = window.location.href;
     }
 
     const setToken = (token: string) => {
@@ -42,7 +44,7 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ user, signin, signout }}>
+        <AuthContext.Provider value={{ user, signin, signout}}>
             {children}
         </AuthContext.Provider>
     );

@@ -1,5 +1,5 @@
 import React from "react";
-import  "../assets/register.css";
+import  "./style.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function register(){
