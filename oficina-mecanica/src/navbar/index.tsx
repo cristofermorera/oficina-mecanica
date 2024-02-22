@@ -11,7 +11,6 @@ function Header() {
                 <TopnavLink ><Link to="/profissionais">Profissionais</Link></TopnavLink>
                 <TopnavLink ><Link to="/produtos">Produtos</Link></TopnavLink>
                 <TopnavLink ><Link to="/os">Ordem de Serviço</Link></TopnavLink>
-                <TopnavLink ><Link to="/vendas">Vendas</Link></TopnavLink>
                 <TopnavLink className="logout">{auth.user && <button onClick={auth.signout}>Sair</button>}</TopnavLink>
             </Topnav>
         </>

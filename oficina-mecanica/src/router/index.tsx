@@ -5,7 +5,6 @@ import Login from '../pages/login';
 import Professionals from '../pages/professionals';
 import Products from '../pages/products';
 import Os from '../pages/os';
-import Sales from '../pages/sales';
 import RequireAuth from '../contexts/auth/requireAuth';
 
 function Router(){
@@ -18,7 +17,6 @@ function Router(){
             <Route path="/profissionais" element={<RequireAuth><Professionals /></RequireAuth>} />
             <Route path="/produtos" element={<RequireAuth><Products /></RequireAuth>} />
             <Route path="/os" element={<RequireAuth><Os /></RequireAuth>} />
-            <Route path="/vendas" element={<RequireAuth><Sales /></RequireAuth>} />
         </Routes>
     )
 }
