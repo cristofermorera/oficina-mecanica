@@ -35,6 +35,8 @@ O objetivo deste projeto é demonstrar como criar um aplicativo web completo, in
 4. Acesse o aplicativo em seu navegador em [http://localhost:3000](http://localhost:3000).
 
 ## Contribuição
+![image](https://github.com/cristofermorera/oficina-mecanica-typescript/assets/63756969/d8b2b889-9ca4-42be-8f74-5767bfe40f86)
+
 
 Contribuições são bem-vindas! Sinta-se à vontade para abrir um pull request com melhorias ou correções de bugs.
 
