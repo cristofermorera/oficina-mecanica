@@ -1,4 +1,4 @@
-# Projeto Spring Boot com Front-end em React
+# Projeto Front-end em React
 
 Este é um projeto desenvolvido em TypeScript que inclui um sistema de gerenciamento de clientes, produtos, funcionários e ordens de serviço, com o front-end desenvolvido em React.
 
