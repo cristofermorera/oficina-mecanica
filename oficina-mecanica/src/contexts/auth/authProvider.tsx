@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useApi } from "../../hooks/useApi";
+import { useApi } from "../../hooks/User";
 import { User } from "../../types/User";
 import { AuthContext } from "./authContext";
 
@@ -23,16 +23,15 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
 
     const signin = async (email: string, password: string) => {
         const data = await api.signin(email, password);
-        if (data.user && data.token) {
+        if (data.user && data.user.token) {
             setUser(data.user);
-            setToken(data.token);
+            setToken(data.user.token);
             return true;
         }
         return false;
     }
 
     const signout = async () => {
-        console.log("signout está sendo executada.");
         setUser(null);
         setToken('');
         await api.logout();

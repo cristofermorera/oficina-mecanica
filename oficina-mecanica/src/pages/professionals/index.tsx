@@ -1,16 +1,30 @@
-import Header from "../../navbar"
+import Header from "../../components/navbar"
 import { Wrapper } from "./style"
 import { Card, CardBody, Row, Button, Table, ButtonToolbar } from 'reactstrap'
-import { AiFillDiff } from 'react-icons/ai'
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "./modal";
+import { useApi } from "../../hooks/Professionals";
+import { Employee } from "../../types/Professionals";
 
 export const Profess = () => {
 
     const [modal, setModal] = useState(false);
 
+    const api = useApi();
+    const [employee, setEmployee] = useState<Employee[]>([]);
     const toggle = () => setModal(!modal);
+    
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await api.listEmployee(); // Chame a função listClients da API
+                setEmployee(data); // Defina os dados recebidos no estado
+            } catch (error) {
+                console.error('Erro ao carregar os dados:', error);
+            }
+        };
+        fetchData(); // Chame a função fetchData para carregar os dados ao montar o componente
+    }, []);
     
     return (
         <>
@@ -33,19 +47,39 @@ export const Profess = () => {
                                     <tr>
                                         <th>ID</th>
                                         <th>Nome</th>
+                                        <th>Nascimento</th>
+                                        <th>Ini Contrato</th>
+                                        <th>Fim Contrato</th>
+                                        <th>Celular</th>
+                                        <th>CEP</th>
+                                        <th>Nickname</th>
                                         <th>Email</th>
-                                        <th>Telefone</th>
-                                        <th className="text-center" style={{ width: '12px' }}>Mais+</th>
+                                        <th>CPF</th>
+                                        <th>Address</th>
+                                        <th>Numero</th>
+                                        <th>Estado</th>
+                                        <th>Obs</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Mark Fernandes da silva castro</td>
-                                        <td>fulano@gmail.com</td>
-                                        <td>55999387784</td>
-                                        <td className="text-center"><Link to="/professional"><AiFillDiff /></Link></td>
-                                    </tr>
+                                    {employee.map((employee, index) => (
+                                        <tr key={index}>
+                                            <td>{employee.id}</td>
+                                            <td>{employee.name}</td>
+                                            <td>{employee.birth}</td>
+                                            <td>{employee.firstDateContract}</td>
+                                            <td>{employee.endDateContract}</td>
+                                            <td>{employee.fone}</td>
+                                            <td>{employee.cep}</td>
+                                            <td>{employee.nickname}</td>
+                                            <td>{employee.email}</td>
+                                            <td>{employee.cpf}</td>
+                                            <td>{employee.address}</td>
+                                            <td>{employee.numberAddress}</td>
+                                            <td>{employee.state}</td>
+                                            <td>{employee.obs}</td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </Table>
                         </Row>

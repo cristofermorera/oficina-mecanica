@@ -1,10 +1,11 @@
 import {Routes, Route } from 'react-router-dom';
-import Home from '../pages/home';
-import Register from '../pages/register';
-import Login from '../pages/login';
-import Professionals from '../pages/professionals';
-import Products from '../pages/products';
-import Os from '../pages/os';
+import Home from '../pages/Home';
+import Register from '../pages/Register';
+import Login from '../pages/Login';
+import Professionals from '../pages/Professionals';
+import Products from '../pages/Products';
+import Os from '../pages/Os';
+import Teste from '../pages/Teste';
 import RequireAuth from '../contexts/auth/requireAuth';
 
 function Router(){
@@ -17,6 +18,7 @@ function Router(){
             <Route path="/profissionais" element={<RequireAuth><Professionals /></RequireAuth>} />
             <Route path="/produtos" element={<RequireAuth><Products /></RequireAuth>} />
             <Route path="/os" element={<RequireAuth><Os /></RequireAuth>} />
+            <Route path="/teste" element={<RequireAuth><Teste /></RequireAuth>} />
         </Routes>
     )
 }

@@ -1,15 +1,31 @@
-import Header from "../../navbar"
+import Header from "../../components/navbar"
 import { Wrapper } from "./style"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardBody, Row, Button, Table, ButtonToolbar } from 'reactstrap'
 import { AiFillDiff } from 'react-icons/ai'
 import { Link } from "react-router-dom";
 import Modal from "./modal";
+import { Product } from "../../types/Products";
+import { useApi } from "../../hooks/Products";
 
 export const Products = () => {
     const [modal, setModal] = useState(false);
+    const [product, setProduct] = useState<Product[]>([]);
 
     const toggle = () => setModal(!modal);
+    const api = useApi();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await api.listProducts();
+                setProduct(data);
+            } catch (error) {
+                console.error('Erro ao carregar os dados:', error);
+            }
+        };
+        fetchData();
+    }, []);
 
     return (
         <>
@@ -32,21 +48,31 @@ export const Products = () => {
                                     <tr>
                                         <th>ID</th>
                                         <th>Descrição</th>
+                                        <th>Marca</th>
+                                        <th>Fornecedor</th>
+                                        <th>Custo</th>
+                                        <th>Margem</th>
                                         <th>Valor Venda</th>
+                                        <th>Validade</th>
+                                        <th>Valor Total</th>
                                         <th>Estoque</th>
-                                        <th>Status</th>
-                                        <th className="text-center" style={{ width: '12px' }}>Mais+</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Mark Fernandes da silva castro</td>
-                                        <td>12,00 R$</td>
-                                        <td>3 Unid</td>
-                                        <td>Disponível</td>
-                                        <td className="text-center"><Link to="/produto"><AiFillDiff /></Link></td>
-                                    </tr>
+                                    {product.map((product, index) => (
+                                        <tr key={index}>
+                                            <td>{product.id}</td>
+                                            <td>{product.description}</td>
+                                            <td>{product.marca}</td>
+                                            <td>{product.fornecedor}</td>
+                                            <td>{product.valueCust}</td>
+                                            <td>{product.valueMargem}</td>
+                                            <td>{product.valueVenda}</td>
+                                            <td>{product.validation}</td>
+                                            <td>{product.value}</td>
+                                            <td>{product.stock}</td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </Table>
                         </Row>

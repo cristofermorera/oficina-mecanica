@@ -1,16 +1,78 @@
-import Header from "../../navbar"
+import Header from "../../components/navbar"
 import { Wrapper } from "./style"
-import { Card, CardBody, Row, Button, Table, ButtonToolbar, Badge } from 'reactstrap'
-import { AiFillDiff } from 'react-icons/ai'
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import Modal from "./Modal";
+import { Card, CardBody, Row, Button, Table, ButtonToolbar } from 'reactstrap'
+import { useEffect, useContext, useState } from "react";
+import ModalOs from "../../components/ModalOs";
+import ModalProduct from "../../components/ModalOs/Product";
+import ModalClient from "../../components/ModalOs/Client";
+import ModalEmployee from "../../components/ModalOs/Employee";
+import { AuthContext } from "../../contexts/auth/authContext";
+import { useApi } from "../../hooks/Os";
+import { OrderService } from "../../types/Os";
+import { Client } from '../../types/Clients';
+import { Product } from "../../types/Products";
+import { Employee } from "../../types/Professionals";
 
 export const OS = () => {
+    const api = useApi();
+    const auth = useContext(AuthContext);
 
     const [modal, setModal] = useState<boolean>(false);
+    const [modalClient, setModalClient] = useState<boolean>(false);
+    const [modalEmployee, setModalEmployee] = useState<boolean>(false);
+    const [modalProduct, setModalProduct] = useState<boolean>(false);
+    const [orderService, setOrderService] = useState<OrderService[]>([]);
+    const [clientOrders, setClientOrders] = useState<Client>();
+    const [employeeOrders, setEmployeeOrders] = useState<Employee>();
+    const [productOrders, setProductOrders] = useState<Product>();
 
     const toggle = () => setModal(!modal);
+
+    const toggleClientModal = () => {
+        if (clientOrders) {
+            toggleClient(clientOrders);
+        }
+    };
+
+    const toggleEmployeeModal = () => {
+        if (employeeOrders) {
+            toggleEmployee(employeeOrders);
+        }
+    };
+
+    const toggleProductModal = () => {
+        if (productOrders) {
+            toggleProduct(productOrders);
+        }
+    };
+
+    const toggleClient = (client: Client) => {
+        setModalClient(!modalClient);
+        setClientOrders(client);
+    };
+
+    const toggleEmployee = (employee: Employee) => {
+        setModalEmployee(!modalEmployee);
+        setEmployeeOrders(employee);
+    };
+
+    const toggleProduct = (product: Product) => {
+        setModalProduct(!modalProduct);
+        setProductOrders(product);
+    };
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await api.listOs(); 
+                setOrderService(data); 
+            } catch (error) {
+                console.error('Erro ao carregar os dados:', error);
+            }
+        };
+        fetchData();
+    }, []);
     
     return (
         <>
@@ -26,6 +88,7 @@ export const OS = () => {
                                 <Button color="primary" onClick={toggle}> Adicionar</Button>
                             </div>
                         </ButtonToolbar>
+                        Bem vindo {auth.user?.name}
                         
                         <Row className='m-1'>
                             <Table bordered >
@@ -33,29 +96,44 @@ export const OS = () => {
                                     <tr>
                                         <th>ID</th>
                                         <th>Data O.S.</th>
-                                        <th>Veículo</th>
+                                        <th>Prev. Entrega</th>
+                                        <th>Carro</th>
                                         <th>Cliente</th>
-                                        <th>Total</th>
-                                        <th>Status</th>
-                                        <th className="text-center" style={{ width: '12px' }}>Mais+</th>
+                                        <th>Funcionario</th>
+                                        <th>Produtos</th>
+                                        <th>Serviço</th>
+                                        <th>Obs.</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>12/12/12</td>
-                                        <td>Celta 2012</td>
-                                        <td>Fernando Machado da silva</td>
-                                        <td>1.290,00R$</td>
-                                        <td><Badge color="warning">Em Andamento</Badge></td>
-                                        <td className="text-center"><Link to="/professional"><AiFillDiff /></Link></td>
-                                    </tr>
+                                    {orderService.map((orderService, index) => (
+                                        <tr key={index}>
+                                            <td>{orderService.orderId}</td>
+                                            <td>{orderService.orderDate}</td>
+                                            <td>{orderService.orderForecast}</td>
+                                            <td>{orderService.carName}</td>
+                                            <td><Button color="primary" onClick={() => toggleClient(orderService.client)}> Cliente</Button></td>
+                                            <td><Button color="primary" onClick={() => toggleEmployee(orderService.employee)}> Funcionarios</Button></td>
+                                            <td><Button color="primary" onClick={() => toggleProduct(orderService.product)}> Produtos</Button></td>
+                                            <td>{orderService.serviceDescription}</td>
+                                            <td>{orderService.obs}</td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </Table>
                         </Row>
                     </CardBody>
                 </Card>
-                <Modal toggleState={toggle} modalState={modal} />
+                <ModalOs toggleState={toggle} modalState={modal} />
+                {clientOrders && (
+                     <ModalClient client={clientOrders} toggleState={toggleClientModal} modalState={modalClient} />
+                )}
+                {employeeOrders && (
+                    <ModalEmployee employee={employeeOrders} toggleState={toggleEmployeeModal} modalState={modalEmployee} />
+                )}
+                {productOrders && (
+                    <ModalProduct product={productOrders} toggleState={toggleProductModal} modalState={modalProduct} />
+                )}
             </Wrapper>
         </>
     )

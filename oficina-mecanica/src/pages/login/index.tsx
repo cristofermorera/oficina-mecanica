@@ -11,22 +11,17 @@ export const Login = () =>{
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleEmailInput = (event: ChangeEvent<HTMLInputElement>) => {
-        setEmail(event.target.value);
-    }
-
     const handlePasswordInput = (event: ChangeEvent<HTMLInputElement>) => {
         setPassword(event.target.value);
     }
 
     const handleLogin = async () => {
         if (email && password) {
-            console.log('Aqui nessa porra');
             const isLogged = await auth.signin(email, password);
             if (isLogged) {
-                navigate('/home');
+                navigate('/os');
             } else {
-                alert("Não deu certo.");
+                alert("Login não efetuado.");
             }
         }
     }
@@ -37,12 +32,13 @@ export const Login = () =>{
                 <div className="card-body">
                     <h2 className="card-title">Login</h2>
                     <div className="mb-2">
-                        <input type="text" className="form-control" placeholder="usuario" value={email} onChange={handleEmailInput} required/>
+                        <input type="text" className="form-control" placeholder="usuario" 
+                                value={email} onChange={e => setEmail(e.target.value)} required/>
                     </div>
                     <div className="mb-3">
                         <input type="password" className="form-control" placeholder="Senha" value={password} onChange={handlePasswordInput} required/>
                     </div>
-
+                    
                     <div className="">
                         <label><input type="checkbox" placeholder="usuario" required/></label>
                         <a href="#">Lembrar Senha</a>
